@@ -1,7 +1,9 @@
-export default function TasksFilter({name}) {
+export default function TasksFilter({children, selected, onClick}) {
+    let classes = ''
+    if(selected) classes += ' selected';
     return (
         <li>
-        <button class="selected">{name}</button>
+        <button className={classes} onClick={onClick}>{children}</button>
       </li>
     )
 
