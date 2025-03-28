@@ -1,4 +1,5 @@
 import TasksFilter from "./TasksFilter";
+import PropTypes from 'prop-types';
 
 export default function Footer({ 
   activeTasksCount, 
@@ -40,3 +41,16 @@ export default function Footer({
     </footer>
   );
 }
+
+Footer.propTypes = {
+  activeTasksCount: PropTypes.number.isRequired,
+  filter: PropTypes.oneOf(['all', 'active', 'completed']).isRequired,
+  onFilterChange: PropTypes.func.isRequired,
+  onClearCompleted: PropTypes.func.isRequired
+};
+
+Footer.defaultProps = {
+  activeTasksCount: 0,
+  onFilterChange: () => console.warn('onFilterChange not passed'),
+  onClearCompleted: () => console.warn('onClearCompleted not passed')
+};
