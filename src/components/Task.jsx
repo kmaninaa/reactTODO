@@ -20,29 +20,19 @@ export default function Task({ task, onToggle, onDelete, onEdit }) {
   return (
     <li className={`${task.completed ? 'completed' : ''} ${isEditing ? 'editing' : ''}`}>
       <div className="view">
-        <input
-          className="toggle"
-          type="checkbox"
-          checked={task.completed}
-          onChange={() => onToggle(task.id)}
-        />
+        <input className="toggle" type="checkbox" checked={task.completed} onChange={() => onToggle(task.id)} />
         <label>
           <span className="description">{task.text}</span>
           <span className="created">
-            created {formatDistanceToNow(task.createdAt, { 
-              addSuffix: true, 
-              includeSeconds: true 
+            created{' '}
+            {formatDistanceToNow(task.createdAt, {
+              addSuffix: true,
+              includeSeconds: true,
             })}
           </span>
         </label>
-        <button 
-          className="icon icon-edit"
-          onClick={handleEdit}
-        />
-        <button 
-          className="icon icon-destroy"
-          onClick={() => onDelete(task.id)}
-        />
+        <button className="icon icon-edit" onClick={handleEdit} />
+        <button className="icon icon-destroy" onClick={() => onDelete(task.id)} />
       </div>
       {isEditing && (
         <input
@@ -61,9 +51,9 @@ Task.propTypes = {
     id: PropTypes.number.isRequired,
     text: PropTypes.string.isRequired,
     completed: PropTypes.bool.isRequired,
-    createdAt: PropTypes.instanceOf(Date).isRequired
+    createdAt: PropTypes.instanceOf(Date).isRequired,
   }).isRequired,
   onToggle: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
-  onEdit: PropTypes.func.isRequired
+  onEdit: PropTypes.func.isRequired,
 };

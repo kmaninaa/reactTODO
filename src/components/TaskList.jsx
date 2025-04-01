@@ -12,32 +12,28 @@ export default function TaskList() {
       id: Date.now(),
       text,
       completed: false,
-      createdAt: new Date()
+      createdAt: new Date(),
     };
     setTasks([...tasks, newTask]);
   };
 
   const toggleTask = (id) => {
-    setTasks(tasks.map(task => 
-      task.id === id ? { ...task, completed: !task.completed } : task
-    ));
+    setTasks(tasks.map((task) => (task.id === id ? { ...task, completed: !task.completed } : task)));
   };
 
   const deleteTask = (id) => {
-    setTasks(tasks.filter(task => task.id !== id));
+    setTasks(tasks.filter((task) => task.id !== id));
   };
 
   const editTask = (id, newText) => {
-    setTasks(tasks.map(task => 
-      task.id === id ? { ...task, text: newText } : task
-    ));
+    setTasks(tasks.map((task) => (task.id === id ? { ...task, text: newText } : task)));
   };
 
   const clearCompleted = () => {
-    setTasks(tasks.filter(task => !task.completed));
+    setTasks(tasks.filter((task) => !task.completed));
   };
 
-  const filteredTasks = tasks.filter(task => {
+  const filteredTasks = tasks.filter((task) => {
     if (filter === 'active') return !task.completed;
     if (filter === 'completed') return task.completed;
     return true;
@@ -49,21 +45,15 @@ export default function TaskList() {
         <h1>TODOS</h1>
         <NewTaskForm onAddTask={addTask} />
       </header>
-      
+
       <ul className="todo-list">
-        {filteredTasks.map(task => (
-          <Task
-            key={task.id}
-            task={task}
-            onToggle={toggleTask}
-            onDelete={deleteTask}
-            onEdit={editTask}
-          />
+        {filteredTasks.map((task) => (
+          <Task key={task.id} task={task} onToggle={toggleTask} onDelete={deleteTask} onEdit={editTask} />
         ))}
       </ul>
 
       <Footer
-        activeTasksCount={tasks.filter(t => !t.completed).length}
+        activeTasksCount={tasks.filter((t) => !t.completed).length}
         filter={filter}
         onFilterChange={setFilter}
         onClearCompleted={clearCompleted}
