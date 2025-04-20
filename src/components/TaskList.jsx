@@ -1,11 +1,18 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import NewTaskForm from './NewTaskForm';
 import Task from './Task';
 import Footer from './Footer';
 
 export default function TaskList() {
-  const [tasks, setTasks] = useState([]);
+  const [tasks, setTasks] = useState(() => {
+    const saved = localStorage.getItem('tasks');
+    return saved ? JSON.parse(saved) : [];
+  });
   const [filter, setFilter] = useState('all');
+
+  useEffect(() => {
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+  }, [tasks]);
 
   const addTask = (text) => {
     const newTask = {
@@ -13,27 +20,44 @@ export default function TaskList() {
       text,
       completed: false,
       createdAt: new Date(),
+      timerSeconds: 0,
+      isTimerRunning: false,
     };
     setTasks([...tasks, newTask]);
   };
 
+  const updateTimer = (id, seconds, isRunning) => {
+    setTasks(tasks.map(task => 
+      task.id === id ? { 
+        ...task, 
+        timerSeconds: seconds,
+        isTimerRunning: isRunning 
+      } : task
+    ));
+  };
+
+  // Остальные функции без изменений
   const toggleTask = (id) => {
-    setTasks(tasks.map((task) => (task.id === id ? { ...task, completed: !task.completed } : task)));
+    setTasks(tasks.map(task => 
+      task.id === id ? { ...task, completed: !task.completed } : task
+    ));
   };
 
   const deleteTask = (id) => {
-    setTasks(tasks.filter((task) => task.id !== id));
+    setTasks(tasks.filter(task => task.id !== id));
   };
 
   const editTask = (id, newText) => {
-    setTasks(tasks.map((task) => (task.id === id ? { ...task, text: newText } : task)));
+    setTasks(tasks.map(task => 
+      task.id === id ? { ...task, text: newText } : task
+    ));
   };
 
   const clearCompleted = () => {
-    setTasks(tasks.filter((task) => !task.completed));
+    setTasks(tasks.filter(task => !task.completed));
   };
 
-  const filteredTasks = tasks.filter((task) => {
+  const filteredTasks = tasks.filter(task => {
     if (filter === 'active') return !task.completed;
     if (filter === 'completed') return task.completed;
     return true;
@@ -47,13 +71,20 @@ export default function TaskList() {
       </header>
 
       <ul className="todo-list">
-        {filteredTasks.map((task) => (
-          <Task key={task.id} task={task} onToggle={toggleTask} onDelete={deleteTask} onEdit={editTask} />
+        {filteredTasks.map(task => (
+          <Task
+            key={task.id} // Используем только id как ключ
+            task={task}
+            onToggle={toggleTask}
+            onDelete={deleteTask}
+            onEdit={editTask}
+            onTimerUpdate={updateTimer}
+          />
         ))}
       </ul>
 
       <Footer
-        activeTasksCount={tasks.filter((t) => !t.completed).length}
+        activeTasksCount={tasks.filter(t => !t.completed).length}
         filter={filter}
         onFilterChange={setFilter}
         onClearCompleted={clearCompleted}

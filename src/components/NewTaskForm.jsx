@@ -2,23 +2,24 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 
 export default function NewTaskForm({ onAddTask }) {
-  const [newTaskText, setNewTaskText] = useState('');
+  const [inputValue, setInputValue] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (newTaskText.trim()) {
-      onAddTask(newTaskText);
-      setNewTaskText('');
+    if (inputValue.trim()) {
+      onAddTask(inputValue);
+      setInputValue('');
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="new-todo-form" onSubmit={handleSubmit}>
       <input
         className="new-todo"
         placeholder="What needs to be done?"
-        value={newTaskText}
-        onChange={(e) => setNewTaskText(e.target.value)}
+        value={inputValue}
+        onChange={(e) => setInputValue(e.target.value)}
+        autoFocus
       />
     </form>
   );
